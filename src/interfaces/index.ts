@@ -1,0 +1,1 @@
+export type StatusNotification = 'error' | 'success' | 'warning' | null
