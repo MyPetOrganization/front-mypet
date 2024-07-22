@@ -2,7 +2,8 @@ import NotificationContext from '@/context/NotificationContext'
 import axios, { AxiosRequestConfig } from 'axios'
 import { useRouter } from 'next/navigation'
 import { useContext } from 'react'
-import Cookies from 'js-cookie' // Import the 'Cookies' module
+import Cookies from 'js-cookie'
+import HttpService from '@/helpers/HttpService'
 
 interface AuthFetchProps {
   endpoint: string
@@ -22,29 +23,31 @@ export function useAuthFetch () {
     options
   }: AuthFetchProps) => {
     try {
+      // console.log(formData)
       const { data } = await axios.post(
-        `http://localhost:3001/${endpoint}`,
-        formData,
+        `http://localhost:3001/api/${endpoint}`,
+        endpoint === "auth/login"
+          ? { email: formData.email, password: formData.password }
+          : formData,
         options
-      )
+      );
 
       showNotification({
-        msj: data.message,
+        msj: "Inicio de sesión exitoso",
         open: true,
         status: 'success'
       })
 
-      console.log(data)
-
       if(endpoint === 'auth/login') {
-        Cookies.set('auth_cookie', data.token, { expires: 7 })
-        Cookies.set('id_user', data.id, { expires: 7 })
+        Cookies.set('auth_cookie', { data }.data.token, { expires: 7 })
+        // Cookies.set('id_user', data.id, { expires: 7 })
       };
 
       if (redirectRoute) router.push(redirectRoute)
     } catch (error: any) {
+      // console.log(error)
       showNotification({
-        msj: error.response.data.message as string,
+        msj: "Credenciales incorrectas",
         open: true,
         status: 'error'
       })

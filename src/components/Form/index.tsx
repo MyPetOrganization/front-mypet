@@ -1,6 +1,6 @@
 'use client'
 
-import { Footer, Input, SubmitButton } from './components'
+import { Footer, Input, Select, SubmitButton } from './components'
 import { createContext, useState } from 'react'
 import styles from './styles.module.scss'
 
@@ -42,5 +42,6 @@ export function Form ({ title, children, onSubmit, description }: FormProps) {
 }
 
 Form.Input = Input
+Form.Select = Select
 Form.Footer = Footer
 Form.SubmitButton = SubmitButton

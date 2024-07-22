@@ -4,7 +4,7 @@ import { Form } from "@/components/Form";
 import { useAuthFetch } from "@/hooks/useAuthFetch";
 import { useLoading } from "@/hooks/useLoading";
 
-export default function RegisterPage () {
+export default function RegisterPage() {
   const { finishLoading, isLoading, startLoading } = useLoading()
   const authFetch = useAuthFetch()
 
@@ -21,7 +21,7 @@ export default function RegisterPage () {
 
   return (
     <>
-      <div className='min-h-screen flex flex-col items-center justify-center'>
+      <div className='min-h-screen flex flex-col items-center justify-center my-2'>
         <Form
           title='Crear un cuenta'
           onSubmit={register}
@@ -44,20 +44,26 @@ export default function RegisterPage () {
               name='password'
               type='password'
             />
-            <Form.Input
+            {/* <Form.Input
               placeholder='Confirma tu contraseña...'
               label='Confirma tu Contraseña'
               name='confirmPassword'
               type='password'
-            />
+            /> */}
             <Form.Input
               placeholder='¿Cuál es tu película favorita?'
               label='Pregunta de seguridad'
               name='favoriteMovie'
               type='text'
             />
+            <Form.Select
+              label="Rol"
+              name="role"
+              options={[{ label: "Dueño de mascota", value: "buyer" }, { label: "Emprendedor", value: "seller" }]}
+              placeholder="Selecciona un rol"
+            />
           </div>
-          <Form.SubmitButton 
+          <Form.SubmitButton
             buttonText='Crear cuenta'
             isLoading={isLoading}
           />

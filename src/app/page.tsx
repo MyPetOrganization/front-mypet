@@ -1,64 +1,132 @@
 'use client'
 
-import { Form } from "@/components/Form";
-import { useAuthFetch } from "@/hooks/useAuthFetch";
-import { useLoading } from "@/hooks/useLoading";
-import HomePage from "./home/page";
-import { useState } from "react";
+import {
+  Container,
+  Header,
+  Content,
+  Footer,
+  Navbar,
+  Nav,
+  InputGroup,
+  Input,
+  Panel,
+  Carousel,
+  IconButton
+} from 'rsuite';
+import UserInfoIcon from '@rsuite/icons/UserInfo';
+import SearchIcon from '@rsuite/icons/Search';
+import LocationIcon from '@rsuite/icons/Location';
+import 'rsuite/dist/rsuite.min.css';
+import "./style.css";
+import { getCookie } from '@/helpers/Credentials';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCartShopping } from '@fortawesome/free-solid-svg-icons/faCartShopping';
+import PlusIcon from '@rsuite/icons/Plus';
 
-export default function LoginPage () {
-  const { finishLoading, isLoading, startLoading } = useLoading()
-  const authFetch = useAuthFetch()
-  const [open, setOpen] = useState(false);
+const CustomInputGroupWidthButton = ({ placeholder, ...props }) => (
+  <InputGroup {...props} inside>
+    <Input placeholder={placeholder} className='w-100' />
+    <InputGroup.Button>
+      <SearchIcon />
+    </InputGroup.Button>
+  </InputGroup>
+);
 
-  // TODO: Probar el llamado a la API
-  const login = async (formData: any) => {
-    startLoading()
-    await authFetch({
-      endpoint: 'auth/login',
-      redirectRoute: '/home',
-      formData,
-    })
-    finishLoading()
-  }
+export default function LandingPage() {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    document.cookie = "auth_cookie=; Max-Age=-99999999;";
+    router.push('/');
+  };
 
   return (
     <>
-      <div className='min-h-screen flex flex-col items-center justify-center'>
-        <Form
-          title='Inicia Sesión'
-          onSubmit={login}
-          description='Formulario para iniciar sesión'
-        >
-          <div className='my-[10px] flex flex-col gap-4'>
-            <Form.Input
-              label='Correo'
-              name='email'
-              placeholder='Ingresa tu correo...'
-            />
-            <Form.Input
-              placeholder='Ingresa tu contraseña...'
-              label='Contraseña'
-              name='password'
-              type='password'
-            />
+      <Container>
+        <Header className='fs-6'>
+          <Navbar appearance="inverse" style={{ background: "#053BA6" }}>
+            <Navbar.Brand>MyPet</Navbar.Brand>
+            <Nav>
+              <Nav.Item icon={<LocationIcon />}>Enviar a Quito</Nav.Item>
+            </Nav>
+            <Nav style={{ width: "60%" }}>
+              <Nav.Item className='w-100'>
+                <CustomInputGroupWidthButton size="lg" placeholder="Buscar productos" />
+              </Nav.Item>
+            </Nav>
+            <Nav pullRight>
+              <Nav.Item icon={<FontAwesomeIcon icon={faCartShopping} fontSize={30} />}>Carrito</Nav.Item>
+
+              {getCookie('auth_cookie') !== null
+                ? <Nav.Menu title="Cuenta"
+                  icon={<UserInfoIcon />}
+                >
+                  <Nav.Item
+                    onClick={() => {
+                      window.location.href = 'duenos-mascotas/';
+                    }}
+                  >
+                    Configuración
+                  </Nav.Item>
+                  <Nav.Item
+                    onClick={handleLogout}
+                  >
+                    Salir
+                  </Nav.Item>
+                </Nav.Menu>
+                : <Nav.Item
+                  icon={<UserInfoIcon />}
+                  onClick={() => {
+                    window.location.href = '/login';
+                  }}
+                >
+                  Iniciar Sesión
+                </Nav.Item>
+              }
+
+            </Nav>
+          </Navbar>
+        </Header>
+
+        <Content>
+          <div className='m-3'>
+            {/* <Carousel autoplay className="custom-slider" style={{ maxHeight: 300 }}> */}
+            <div className='d-flex justify-content-center'>
+              <Carousel 
+                className="custom-slider w-75" 
+                style={{ maxHeight: 300, marginBottom: 12, borderRadius: 12 }}
+                shape='bar'
+              >
+                <Image src="/1.png" width={600} height={250} alt='' />
+                <Image src="/2.jpeg" width={600} height={250} alt='' />
+                <Image src="/3.jpg" width={600} height={250} alt='' />
+              </Carousel>
+            </div>
+
+            <h3 style={{ color: "#0396A6", fontWeight: "bold", marginBottom: 10 }}>Productos destacados</h3>
+
+            <Panel shaded bordered bodyFill style={{ display: 'inline-block', width: 240 }}>
+              {/* <img src="https://via.placeholder.com/240x180" height="180" /> */}
+              <Image src="/1.png" width={240} height={180} alt='' />
+              <Panel header="Nombre del producto" style={{ color: "#F28066", fontWeight: "bold" }}>
+                <h3 style={{ color: "#04BF68" }}>$0.00</h3>
+                <p style={{ color: "black" }}>
+                  <small>
+                    Descripcion del producto.
+                  </small>
+                </p>
+                <IconButton appearance='primary' color='green' icon={<PlusIcon />} className='mt-2'>
+                  Añadir al carrito
+                </IconButton>
+              </Panel>
+            </Panel>
           </div>
-          <Form.SubmitButton 
-            buttonText='Iniciar Sesión'
-            isLoading={isLoading}
-          />
-          <Form.Footer
-            description='¿Te olvidate tu contraseña?'
-            link='/change-password'
-            textLink='Recuperar contraseña'
-          />
-          <Form.Footer
-            description='¿Aun no tienes cuenta?'
-            link='/register'
-            textLink='Registrate'
-          />
-        </Form>
-      </div>
+        </Content>
+
+        <Footer>Footer</Footer>
+      </Container>
     </>
   );
 }
