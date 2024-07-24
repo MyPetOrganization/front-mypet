@@ -91,7 +91,7 @@ const CrearActualizar: React.FC<CrearActualizarProps> = ({ open, setOpen, actual
             if (imageFile) {
                 formData.append('image', imageFile);
             }
-            formData.append('userId', localStorage.getItem('id_user'));
+            formData.append('userId', localStorage.getItem('id_user') || '');
             formData.append('imageUrl', "");
 
             for (var pair of formData.entries()) {

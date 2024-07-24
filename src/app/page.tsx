@@ -25,7 +25,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons/faCartShopping';
 import PlusIcon from '@rsuite/icons/Plus';
 
-const CustomInputGroupWidthButton = ({ placeholder, ...props }) => (
+const CustomInputGroupWidthButton = (placeholder: any, ...props: any[]) => (
   <InputGroup {...props} inside>
     <Input placeholder={placeholder} className='w-100' />
     <InputGroup.Button>

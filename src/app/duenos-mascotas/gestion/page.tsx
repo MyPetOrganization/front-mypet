@@ -105,7 +105,7 @@ export default function GestionCuenta() {
     const [formCardError, setFormCardError] = useState({});
     const [updateCard, setUpdateCard] = useState(false);
     const [deleteCard, setDeleteCard] = useState(false);
-    const [numberForDel, setNumberForDel] = useState(0);
+    const [numberForDel, setNumberForDel] = useState("");
     const [formCardValue, setFormCardValue] = useState({
         cardName: "",
         cardNumber: "",
@@ -167,7 +167,7 @@ export default function GestionCuenta() {
         }
 
         if (updateCard) {
-            updateDataCard({ cardName: formCardValue.cardName, cardNumber: parseInt(formCardValue.cardNumber) });
+            updateDataCard({ cardName: formCardValue.cardName, cardNumber: formCardValue.cardNumber });
         } else {
             handleCreateCard(formCardValue);
         }
@@ -316,7 +316,7 @@ export default function GestionCuenta() {
     const handleCreateCard = (payload: Object) => {
         HttpService
             .post(`cards/${localStorage.getItem('id_user')}`,
-                { ...payload, cardNumber: parseInt(payload.cardNumber), userId: parseInt(localStorage.getItem('id_user')) }
+                { ...payload, cardNumber: payload.cardNumber, userId: parseInt(localStorage.getItem('id_user')) }
             )
             .then((response) => {
                 if (response.status === 201) {
@@ -394,15 +394,15 @@ export default function GestionCuenta() {
             });
     }
 
-    const handleDeleteCard = (cardNumber: number) => {
-        console.log(cardNumber);
+    const handleDeleteCard = (cardNumber: string) => {
+        console.log("deleted card ---", cardNumber);
         setNumberForDel(cardNumber);
         setDeleteCard(true);
     }
 
     const deleteDataCard = () => {
         HttpService
-            .delete(`cards/${localStorage.getItem('id_user')}`, ({ cardNumber: numberForDel }))
+            .delete(`cards/${localStorage.getItem('id_user')}`, { data: { cardNumber: numberForDel } })
             .then((response) => {
                 if (response.status === 204) {
                     getCards();
@@ -412,7 +412,7 @@ export default function GestionCuenta() {
                         open: true,
                         status: 'success'
                     })
-                    setNumberForDel(0);
+                    setNumberForDel("");
                 } else {
                     showNotification({
                         msj: "No se pudo eliminar la tarjeta",
@@ -562,7 +562,7 @@ export default function GestionCuenta() {
                                                             onClick={() => handleUpdateCard(tarjeta)}
                                                         />
                                                         <IconButton color="red" appearance="primary" icon={<TrashIcon />}
-                                                            onClick={() => handleDeleteCard(parseInt(tarjeta.cardNumber))}
+                                                            onClick={() => handleDeleteCard(tarjeta.cardNumber)}
                                                         />
                                                     </ButtonGroup>
                                                 </Col>
