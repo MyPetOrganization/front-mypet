@@ -23,12 +23,9 @@ export function useAuthFetch () {
     options
   }: AuthFetchProps) => {
     try {
-      // console.log(formData)
       const { data } = await axios.post(
         `http://localhost:3001/api/${endpoint}`,
-        endpoint === "auth/login"
-          ? { email: formData.email, password: formData.password }
-          : formData,
+        formData,
         options
       );
 
@@ -39,7 +36,9 @@ export function useAuthFetch () {
       })
 
       if(endpoint === 'auth/login') {
+        console.log(data)
         Cookies.set('auth_cookie', { data }.data.token, { expires: 7 })
+        localStorage.setItem('id_user', { data }.data.user.id)
         // Cookies.set('id_user', data.id, { expires: 7 })
       };
 

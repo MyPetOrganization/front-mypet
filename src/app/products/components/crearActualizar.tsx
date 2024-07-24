@@ -45,7 +45,7 @@ const CrearActualizar: React.FC<CrearActualizarProps> = ({ open, setOpen, actual
         name: '',
         price: "",
     });
-    
+
 
     useEffect(() => {
         if (actualizar) {
@@ -89,15 +89,21 @@ const CrearActualizar: React.FC<CrearActualizarProps> = ({ open, setOpen, actual
             formData.append('name', formValue.name);
             formData.append('price', formValue.price);
             if (imageFile) {
-              formData.append('image', imageFile);
+                formData.append('image', imageFile);
             }
-            console.log("TOKEN: ", getCookie('auth_cookie'));
-            const response = await axios.post('http://localhost:3001/products/create', formData, {
+            formData.append('userId', localStorage.getItem('id_user'));
+            formData.append('imageUrl', "");
+
+            for (var pair of formData.entries()) {
+                console.log(pair[0] + ', ' + pair[1]);
+            }
+            // console.log("TOKEN: ", getCookie('auth_cookie'));
+            const response = await axios.post(`http://localhost:3001/api/products/${localStorage.getItem('id_user')}`, formData, {
                 headers: {
                     Authorization: `Bearer ${getCookie('auth_cookie')}`
                 }
             });
-            console.log(response.data);
+            // console.log(response.data);
             // setConsult(true);
 
             setFormValue({
@@ -127,24 +133,23 @@ const CrearActualizar: React.FC<CrearActualizarProps> = ({ open, setOpen, actual
             formData.append('name', formValue.name);
             formData.append('price', formValue.price);
             if (imageFile) {
-              formData.append('image', imageFile);
+                formData.append('image', imageFile);
             }
+            formData.append('id', dataActual.id);
 
-            let params: Partial<typeof dataActual> = {
-                name: formValue.name,
-                price: formValue.price,
-                imageUrl: dataActual.imageUrl,
-            };
+            // let params: Partial<typeof dataActual> = {
+            //     name: formValue.name,
+            //     price: formValue.price,
+            //     imageUrl: dataActual.imageUrl,
+            // };
 
-            console.log("DATA",dataActual)
-            console.log("Valores finales",params)
+            // console.log("Valores finales", params)
 
-            const response = await axios.put(`http://localhost:3001/products/${dataActual.id}`, params, {
+            const response = await axios.patch(`http://localhost:3001/api/products/${dataActual.id}`, formData, {
                 headers: {
                     Authorization: `Bearer ${getCookie('auth_cookie')}`
                 }
             });
-            console.log(response.data);
             // setConsult(true);
 
             setFormValue({
@@ -163,7 +168,7 @@ const CrearActualizar: React.FC<CrearActualizarProps> = ({ open, setOpen, actual
     return (
         <Modal size="sm" open={showModal} onClose={close}>
             <Modal.Header>
-                <Modal.Title>{actualizar ? "Actualizar" : "Crear" } Producto</Modal.Title>
+                <Modal.Title>{actualizar ? "Actualizar" : "Crear"} Producto</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form
@@ -185,13 +190,13 @@ const CrearActualizar: React.FC<CrearActualizarProps> = ({ open, setOpen, actual
                                     <Form.ControlLabel>Foto del producto</Form.ControlLabel>
                                     <div className="flex flex-col items-center mt-4">
                                         <label className="cursor-pointer bg-blue-500 text-white py-2 px-4 rounded mb-2">
-                                        Subir imagen
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            onChange={handleImageChange}
-                                            className="hidden"
-                                        />
+                                            Subir imagen
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={handleImageChange}
+                                                className="hidden"
+                                            />
                                         </label>
                                         <div className="flex flex-col items-center">
                                             {previewUrl ? (

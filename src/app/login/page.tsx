@@ -16,7 +16,7 @@ export default function LoginPage() {
         await authFetch({
             endpoint: 'auth/login',
             // redirectRoute: '/home',
-            redirectRoute: `${formData.rol === 'buyer' ? '/' : formData.rol === 'seller' ? '/home' : ''}`,
+            redirectRoute: `${formData.role === 'buyer' ? '/' : formData.role === 'seller' ? '/home' : ''}`,
             formData,
         })
         finishLoading()
@@ -44,7 +44,7 @@ export default function LoginPage() {
                         />
                         <Form.Select 
                             label="Rol"
-                            name="rol"
+                            name="role"
                             options={[ {label: "Dueño de mascota", value: "buyer"}, {label: "Emprendedor", value: "seller"} ]}
                             placeholder="Selecciona un rol"
                         />

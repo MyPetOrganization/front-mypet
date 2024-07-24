@@ -31,11 +31,15 @@ export default function StockProductos() {
     const [consult, setConsult] = useState(true);
     const [idDelete, setIdDelete] = useState(0);
     const [loading, setLoading] = useState(false)
-    
+
     const getProducts = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`http://localhost:3001/products/${getCookie('id_user')}`);
+            const response = await axios.get(`http://localhost:3001/api/products/${localStorage.getItem('id_user')}`, {
+                headers: {
+                    "Authorization": `Bearer ${getCookie("auth_cookie")}`
+                }
+            });
             console.log(response);
             setData(response.data);
             setConsult(false);
@@ -63,7 +67,11 @@ export default function StockProductos() {
 
     const handleSearch = async () => {
         try {
-            const response = await axios.post(`http://localhost:3001/products/p`, { name: searchKeyword });
+            const response = await axios.post(`http://localhost:3001/api/products/fobn/${localStorage.getItem('id_user')}`, { name: searchKeyword }, {
+                headers: {
+                    Authorization: `Bearer ${getCookie('auth_cookie')}`
+                }
+            });
             console.log(response);
             setData(response.data);
             setConsult(false);
@@ -92,8 +100,8 @@ export default function StockProductos() {
             removeProduct(idDelete);
         }
     }, [remove])
-    
-    
+
+
     const handleDelete = (id: number) => {
         setIdDelete(id);
         setConfirmation(true);
@@ -102,7 +110,12 @@ export default function StockProductos() {
     const removeProduct = async (id: number) => {
         if (remove) {
             try {
-                const response = await axios.delete(`http://localhost:3001/products/${id}`);
+                const response = await axios.delete(`http://localhost:3001/api/products/${localStorage.getItem('id_user')}`, {
+                    headers: {
+                        "Authorization": `Bearer ${getCookie("auth_cookie")}`
+                    },
+                    data: { id: id },
+                });
                 console.log(response);
                 //setData(response.data);
                 //setConsult(true);
@@ -113,7 +126,6 @@ export default function StockProductos() {
             }
             setConsult(true);
             setIdDelete(0);
-            console.log('Eliminado');
         }
     };
 
@@ -138,7 +150,7 @@ export default function StockProductos() {
                         style={{ width: 100, height: 100 }}
                     />
                 </div>
-            
+
             ),
             actions: (
                 <div className="d-flex justify-content-around">
@@ -153,7 +165,7 @@ export default function StockProductos() {
                 </div>
             )
         }));
-    }; 
+    };
 
     return (
         <>
@@ -211,10 +223,10 @@ export default function StockProductos() {
                 </Content>
             </Container>
 
-            {openModal && 
-                <CrearActualizar 
-                    open={openModal} 
-                    setOpen={setOpenModal} 
+            {openModal &&
+                <CrearActualizar
+                    open={openModal}
+                    setOpen={setOpenModal}
                     actualizar={actualizar}
                     setActualizar={setActualizar}
                     dataActual={dataActualizar}
