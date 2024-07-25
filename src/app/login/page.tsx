@@ -16,7 +16,7 @@ export default function LoginPage() {
         await authFetch({
             endpoint: 'auth/login',
             // redirectRoute: '/home',
-            redirectRoute: `${formData.role === 'buyer' ? '/' : formData.role === 'seller' ? '/home' : ''}`,
+            // redirectRoute: `${formData.role === 'buyer' ? '/' : formData.role === 'seller' ? '/home' : ''}`,
             formData,
         })
         finishLoading()

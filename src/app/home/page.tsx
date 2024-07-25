@@ -74,7 +74,8 @@ export default function HomePage () {
 
   const handleLogout = () => {
     document.cookie = "auth_cookie=; Max-Age=-99999999;";
-    document.cookie = "id_user=; Max-Age=-99999999;";
+    document.cookie = "role=; Max-Age=-99999999;";
+    localStorage.clear();
     router.push('/');
   };
 

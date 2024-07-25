@@ -8,6 +8,12 @@
         font-weight: 600;
     }
 
+    .inputWrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
     input {
         padding: .6rem 1rem;
         border: .5px solid #878787;
@@ -15,17 +21,32 @@
         border-radius: 6px;
         transition-duration: .3s;
         outline: .5px solid transparent;
+        width: 100%;
 
         &:focus {
             outline: 1.5px solid black;
         }
+    }
+
+    .togglePassword {
+        position: absolute;
+        right: 1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+
+    .error {
+        color: red;
+        font-size: 12px;
+        margin-top: 4px;
     }
 }
 
 .submitButton {
     margin-top: 1rem;
     width: 100%;
-    background: black;
+    background: #053BA6;
     color: white;
     text-align: center;
     border-radius: 6px;

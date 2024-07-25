@@ -11,7 +11,9 @@ import {
   Input,
   Panel,
   Carousel,
-  IconButton
+  IconButton,
+  Row,
+  Col
 } from 'rsuite';
 import UserInfoIcon from '@rsuite/icons/UserInfo';
 import SearchIcon from '@rsuite/icons/Search';
@@ -25,9 +27,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons/faCartShopping';
 import PlusIcon from '@rsuite/icons/Plus';
 
-const CustomInputGroupWidthButton = (placeholder: any, ...props: any[]) => (
+const CustomInputGroupWidthButton = (...props: any[]) => (
   <InputGroup {...props} inside>
-    <Input placeholder={placeholder} className='w-100' />
+    <Input className='w-100' />
     <InputGroup.Button>
       <SearchIcon />
     </InputGroup.Button>
@@ -39,6 +41,8 @@ export default function LandingPage() {
 
   const handleLogout = () => {
     document.cookie = "auth_cookie=; Max-Age=-99999999;";
+    document.cookie = "role=; Max-Age=-99999999;";
+    localStorage.clear();
     router.push('/');
   };
 
@@ -53,7 +57,7 @@ export default function LandingPage() {
             </Nav>
             <Nav style={{ width: "60%" }}>
               <Nav.Item className='w-100'>
-                <CustomInputGroupWidthButton size="lg" placeholder="Buscar productos" />
+                <CustomInputGroupWidthButton size="lg" />
               </Nav.Item>
             </Nav>
             <Nav pullRight>
@@ -107,25 +111,93 @@ export default function LandingPage() {
 
             <h3 style={{ color: "#0396A6", fontWeight: "bold", marginBottom: 10 }}>Productos destacados</h3>
 
-            <Panel shaded bordered bodyFill style={{ display: 'inline-block', width: 240 }}>
-              {/* <img src="https://via.placeholder.com/240x180" height="180" /> */}
-              <Image src="/1.png" width={240} height={180} alt='' />
-              <Panel header="Nombre del producto" style={{ color: "#F28066", fontWeight: "bold" }}>
-                <h3 style={{ color: "#04BF68" }}>$0.00</h3>
-                <p style={{ color: "black" }}>
-                  <small>
-                    Descripcion del producto.
-                  </small>
-                </p>
-                <IconButton appearance='primary' color='green' icon={<PlusIcon />} className='mt-2'>
-                  Añadir al carrito
-                </IconButton>
-              </Panel>
-            </Panel>
+            <Row>
+              <Col xs={24} sm={12} md={8} lg={6}>
+                <Panel shaded bordered bodyFill style={{ display: 'inline-block', width: 240 }}>
+                  <Image src="/1.png" width={240} height={180} alt='' />
+                  <Panel header="Nombre del producto" style={{ color: "#F28066", fontWeight: "bold" }}>
+                    <h3 style={{ color: "#04BF68" }}>$0.00</h3>
+                    <p style={{ color: "black" }}>
+                      <small>
+                        Descripcion del producto.
+                      </small>
+                    </p>
+                    <IconButton appearance='primary' color='green' icon={<PlusIcon />} className='mt-2'>
+                      Añadir al carrito
+                    </IconButton>
+                  </Panel>
+                </Panel>
+              </Col>
+              <Col xs={24} sm={12} md={8} lg={6}>
+                <Panel shaded bordered bodyFill style={{ display: 'inline-block', width: 240 }}>
+                  <Image src="/1.png" width={240} height={180} alt='' />
+                  <Panel header="Nombre del producto" style={{ color: "#F28066", fontWeight: "bold" }}>
+                    <h3 style={{ color: "#04BF68" }}>$0.00</h3>
+                    <p style={{ color: "black" }}>
+                      <small>
+                        Descripcion del producto.
+                      </small>
+                    </p>
+                    <IconButton appearance='primary' color='green' icon={<PlusIcon />} className='mt-2'>
+                      Añadir al carrito
+                    </IconButton>
+                  </Panel>
+                </Panel>
+              </Col>
+              <Col xs={24} sm={12} md={8} lg={6}>
+                <Panel shaded bordered bodyFill style={{ display: 'inline-block', width: 240 }}>
+                  <Image src="/1.png" width={240} height={180} alt='' />
+                  <Panel header="Nombre del producto" style={{ color: "#F28066", fontWeight: "bold" }}>
+                    <h3 style={{ color: "#04BF68" }}>$0.00</h3>
+                    <p style={{ color: "black" }}>
+                      <small>
+                        Descripcion del producto.
+                      </small>
+                    </p>
+                    <IconButton appearance='primary' color='green' icon={<PlusIcon />} className='mt-2'>
+                      Añadir al carrito
+                    </IconButton>
+                  </Panel>
+                </Panel>
+              </Col>
+              <Col xs={24} sm={12} md={8} lg={6}>
+                <Panel shaded bordered bodyFill style={{ display: 'inline-block', width: 240 }}>
+                  <Image src="/1.png" width={240} height={180} alt='' />
+                  <Panel header="Nombre del producto" style={{ color: "#F28066", fontWeight: "bold" }}>
+                    <h3 style={{ color: "#04BF68" }}>$0.00</h3>
+                    <p style={{ color: "black" }}>
+                      <small>
+                        Descripcion del producto.
+                      </small>
+                    </p>
+                    <IconButton appearance='primary' color='green' icon={<PlusIcon />} className='mt-2'>
+                      Añadir al carrito
+                    </IconButton>
+                  </Panel>
+                </Panel>
+              </Col>
+            </Row>
           </div>
         </Content>
 
-        <Footer>Footer</Footer>
+        <Footer>
+      <div className='d-flex justify-content-center align-items-center' style={{ height: "60px", background: "#053BA6" }}>
+        <h5 style={{ color: "white", margin: 0 }}>MyPet © 2024</h5>
+      </div>
+      <div className='d-flex justify-content-center' style={{ background: "#053BA6", padding: "10px 0" }}>
+        <ul className='list-inline' style={{ margin: 0 }}>
+          <li className='list-inline-item'>
+            <a href='#' style={{ color: "#F28066", textDecoration: "none", fontWeight: "bold" }}>About Us |</a>
+          </li>
+          <li className='list-inline-item'>
+            <a href='#' style={{ color: "#F28066", textDecoration: "none", fontWeight: "bold" }}>Contact |</a>
+          </li>
+          <li className='list-inline-item'>
+            <a href='#' style={{ color: "#F28066", textDecoration: "none", fontWeight: "bold" }}>Privacy Policy</a>
+          </li>
+        </ul>
+      </div>
+    </Footer>
       </Container>
     </>
   );

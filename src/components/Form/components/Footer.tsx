@@ -11,7 +11,7 @@ export function Footer ({ description, link, textLink }: FooterProps) {
     <div className='w-full flex justify-center mt-3'>
       <span className='text-[12px]'>
         {description}{' '}
-        <Link href={link} className='font-bold'>
+        <Link href={link} className='font-bold'style={{ color: "#F28066" }}>
           {textLink}
         </Link>
       </span>

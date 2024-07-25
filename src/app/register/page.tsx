@@ -9,11 +9,11 @@ export default function RegisterPage() {
   const authFetch = useAuthFetch()
 
   const register = async (formData: any) => {
-    console.log(formData)
+    // console.log(formData)
     startLoading()
     await authFetch({
       endpoint: 'auth/register',
-      redirectRoute: '/',
+      redirectRoute: '/login',
       formData,
     })
     finishLoading()
@@ -69,7 +69,7 @@ export default function RegisterPage() {
           />
           <Form.Footer
             description='¿Ya tienes cuenta?'
-            link='/'
+            link='/login'
             textLink='Iniciar sesión'
           />
         </Form>

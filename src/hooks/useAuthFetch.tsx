@@ -3,7 +3,6 @@ import axios, { AxiosRequestConfig } from 'axios'
 import { useRouter } from 'next/navigation'
 import { useContext } from 'react'
 import Cookies from 'js-cookie'
-import HttpService from '@/helpers/HttpService'
 
 interface AuthFetchProps {
   endpoint: string
@@ -37,14 +36,23 @@ export function useAuthFetch () {
 
       if(endpoint === 'auth/login') {
         console.log(data)
-        Cookies.set('auth_cookie', { data }.data.token, { expires: 7 })
-        localStorage.setItem('id_user', { data }.data.user.id)
-        // Cookies.set('id_user', data.id, { expires: 7 })
-      };
+        Cookies.set('auth_cookie', data.token, { expires: 7 })
+        Cookies.set('role', data.user.role, { expires: 7 })
+        localStorage.setItem('id_user', data.user.id)
+        // localStorage.setItem('role', data.user.role)
 
-      if (redirectRoute) router.push(redirectRoute)
+        // Configurar el encabezado con el rol del usuario
+        // axios.defaults.headers.common['x-user-role'] = data.user.role
+
+        // Redirigir basado en el rol
+        if (data.user.role === 'seller') {
+          router.push('/home')
+        } else if (data.user.role === 'buyer') {
+          router.push('/')
+        }
+      }
+
     } catch (error: any) {
-      // console.log(error)
       showNotification({
         msj: "Credenciales incorrectas",
         open: true,
