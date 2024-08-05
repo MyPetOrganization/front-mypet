@@ -1,13 +1,13 @@
 'use client'
 
-import { 
-  Container, 
-  Header, 
-  Sidebar, 
-  Sidenav, 
-  Content, 
-  Navbar, 
-  Nav, 
+import {
+  Container,
+  Header,
+  Sidebar,
+  Sidenav,
+  Content,
+  Navbar,
+  Nav,
   Button
 } from 'rsuite';
 import CogIcon from '@rsuite/icons/legacy/Cog';
@@ -29,14 +29,14 @@ const headerStyles = {
   padding: 18,
   fontSize: 16,
   height: 56,
-  background: '#34c3ff',
+  backgroundColor: "#053BA6",
   color: ' #fff',
   whiteSpace: 'nowrap',
-  overflow: 'hidden'
+  overflow: 'hidden',
 };
 
 const NavToggle = ({ expand, onChange, handleLogout }: { expand: boolean, onChange: () => void, handleLogout: () => void }) => {
-  
+
   return (
     <Navbar appearance="subtle" className="nav-toggle">
       <Nav>
@@ -44,18 +44,18 @@ const NavToggle = ({ expand, onChange, handleLogout }: { expand: boolean, onChan
           noCaret
           placement="topStart"
           trigger="click"
-          title={<CogIcon style={{ width: 20, height: 20 }} />}
+          title={<CogIcon style={{ width: 20, height: 20, color: "#04BF68" }} />}
         >
           <Nav.Item>
             <Button onClick={handleLogout}>
-              Sign out
+              Cerrar Sesión
             </Button>
           </Nav.Item>
         </Nav.Menu>
       </Nav>
 
       <Nav pullRight>
-        <Nav.Item onClick={onChange} style={{ width: 56, textAlign: 'center' }}>
+        <Nav.Item onClick={onChange} style={{ width: 56, textAlign: 'center', color: "#04BF68" }}>
           {expand ? <AngleLeftIcon /> : <AngleRightIcon />}
         </Nav.Item>
       </Nav>
@@ -63,7 +63,7 @@ const NavToggle = ({ expand, onChange, handleLogout }: { expand: boolean, onChan
   );
 };
 
-export default function HomePage () {
+export default function HomePage() {
   const [expand, setExpand] = useState(true);
   const [openTab, setOpenTab] = useState("1");
   const router = useRouter();
@@ -80,48 +80,61 @@ export default function HomePage () {
   };
 
   return (
-    <div className="sidebar-page">
-      <Container>
-        <Sidebar
-          style={{ display: 'flex', flexDirection: 'column', border: "1px solid #4F979C" }}
-          width={expand ? 240 : 70}
-          collapsible
+    <div className="sidebar-page" style={{ height: '100vh', display: 'flex' }}>
+      <Sidebar
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          border: "3px solid #053BA6",
+          position: 'fixed',
+          top: 0,
+          bottom: 0,
+          height: '100vh',
+          width: expand ? 240 : 70,
+          zIndex: 1000,
+          transition: 'width 0.3s',
+          // background: "#053BA6"
+        }}
+        collapsible
+      >
+        <Sidenav.Header>
+          <div style={headerStyles} className='align-middle'>
+            <FontAwesomeIcon icon={faShieldDog} fontSize={30} />
+            {expand ? <span style={{ marginLeft: 12 }} className='fw-bolder fs-5'>My Pet</span> : ""}
+          </div>
+        </Sidenav.Header>
+        <Sidenav
+          expanded={expand}
+          defaultOpenKeys={['3']}
+          appearance="subtle"
+          style={{ flex: 1, overflowY: 'auto' }}
         >
-          <Sidenav.Header>
-            <div style={headerStyles} className='align-middle'>
-              <FontAwesomeIcon icon={faShieldDog} fontSize={30} />
-              {expand ? <span style={{ marginLeft: 12 }} className='fw-bolder'>My Pet</span> : ""}
-            </div>
-          </Sidenav.Header>
-          <Sidenav 
-            expanded={expand} 
-            defaultOpenKeys={['3']} 
-            appearance="subtle" 
-            style={expand ? { height: "85vh" } : { height: "78vh" } }
-          >
-            <Sidenav.Body>
-              <Nav onSelect={(e) => handleSelect(e)}>
-                <Nav.Item eventKey="1" active icon={<DashboardIcon />}>
-                  Stock de productos
-                </Nav.Item>
-                <Nav.Item eventKey="2" icon={<GroupIcon />}>
-                  Chat de emprendedores
-                </Nav.Item>
-              </Nav>
-            </Sidenav.Body>
-          </Sidenav>
-          <NavToggle expand={expand} onChange={() => setExpand(!expand)} handleLogout={handleLogout} />
-        </Sidebar>
+          <Sidenav.Body>
+            <Nav onSelect={(e) => handleSelect(e)}>
+              <Nav.Item eventKey="1" active icon={<DashboardIcon />} style={{ color: "#04BF68", fontWeight: "bold" }}>
+                Stock de productos
+              </Nav.Item>
+              <hr className='my-0 mx-1' style={{ border: "solid 2px #FE5028" }} />
+              <Nav.Item eventKey="2" icon={<GroupIcon />} style={{ color: "#04BF68", fontWeight: "bold" }}>
+                Chat de emprendedores
+              </Nav.Item>
+            </Nav>
+          </Sidenav.Body>
+        </Sidenav>
+        <NavToggle expand={expand} onChange={() => setExpand(!expand)} handleLogout={handleLogout} />
+      </Sidebar>
 
-        <Panel bordered className='m-4 w-100' style={{ border: "1px solid #4F979C" }}>
+      <div style={{ marginLeft: expand ? 240 : 70, flex: 1, overflowY: 'auto' }}>
+        <Panel bordered className='m-4' style={{ border: "3px solid #053BA6" }}>
           {openTab === "1" && (
             <StockProductos />
+            // <span>Holaaaa</span>
           )}
           {openTab === "2" && (
             <ChatPage />
           )}
         </Panel>
-      </Container>
+      </div>
     </div>
   );
 }

@@ -1,9 +1,11 @@
 "use client"
 
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
-import { Modal, Form, Button, Schema, Grid, Col, Row } from 'rsuite';
+import { Modal, Form, Button, Schema, Grid, Col, Row, IconButton } from 'rsuite';
 import axios from 'axios';
 import { getCookie } from './constants';
+import { URL_BASE } from '@/config';
+import CheckOutlineIcon from '@rsuite/icons/CheckOutline';
 
 interface CrearActualizarProps {
     open: boolean;
@@ -98,7 +100,7 @@ const CrearActualizar: React.FC<CrearActualizarProps> = ({ open, setOpen, actual
                 console.log(pair[0] + ', ' + pair[1]);
             }
             // console.log("TOKEN: ", getCookie('auth_cookie'));
-            const response = await axios.post(`http://localhost:3001/api/products/${localStorage.getItem('id_user')}`, formData, {
+            const response = await axios.post(`${URL_BASE}products/${localStorage.getItem('id_user')}`, formData, {
                 headers: {
                     Authorization: `Bearer ${getCookie('auth_cookie')}`
                 }
@@ -145,7 +147,7 @@ const CrearActualizar: React.FC<CrearActualizarProps> = ({ open, setOpen, actual
 
             // console.log("Valores finales", params)
 
-            const response = await axios.patch(`http://localhost:3001/api/products/${dataActual.id}`, formData, {
+            const response = await axios.patch(`${URL_BASE}products/${dataActual.id}`, formData, {
                 headers: {
                     Authorization: `Bearer ${getCookie('auth_cookie')}`
                 }
@@ -168,7 +170,7 @@ const CrearActualizar: React.FC<CrearActualizarProps> = ({ open, setOpen, actual
     return (
         <Modal size="sm" open={showModal} onClose={close}>
             <Modal.Header>
-                <Modal.Title>{actualizar ? "Actualizar" : "Crear"} Producto</Modal.Title>
+                <Modal.Title style={{ color: "#FE5028" }}>{actualizar ? "Actualizar" : "Crear"} Producto</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form
@@ -189,7 +191,7 @@ const CrearActualizar: React.FC<CrearActualizarProps> = ({ open, setOpen, actual
                                 <Form.Group className='ms-4'>
                                     <Form.ControlLabel>Foto del producto</Form.ControlLabel>
                                     <div className="flex flex-col items-center mt-4">
-                                        <label className="cursor-pointer bg-blue-500 text-white py-2 px-4 rounded mb-2">
+                                        <label className="cursor-pointer text-white py-2 px-4 rounded mb-2" style={{ background: "#FE5028" }}>
                                             Subir imagen
                                             <input
                                                 type="file"
@@ -216,9 +218,14 @@ const CrearActualizar: React.FC<CrearActualizarProps> = ({ open, setOpen, actual
                         </Row>
                     </Grid>
                     <Form.Group className='d-flex justify-content-end'>
-                        <Button appearance="primary" onClick={actualizar ? handleUpdate : handleSubmit}>
+                        <IconButton 
+                            appearance="primary"
+                            color='green'
+                            icon={<CheckOutlineIcon />}
+                            onClick={actualizar ? handleUpdate : handleSubmit}
+                        >
                             Guardar
-                        </Button>
+                        </IconButton>
                     </Form.Group>
                 </Form>
             </Modal.Body>

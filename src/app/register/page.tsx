@@ -1,22 +1,69 @@
 'use client'
 
 import { Form } from "@/components/Form";
+import NotificationContext from "@/context/NotificationContext";
 import { useAuthFetch } from "@/hooks/useAuthFetch";
 import { useLoading } from "@/hooks/useLoading";
+import { useContext } from "react";
 
 export default function RegisterPage() {
   const { finishLoading, isLoading, startLoading } = useLoading()
   const authFetch = useAuthFetch()
+  const { showNotification } = useContext(NotificationContext)
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePassword = (password: string) => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return passwordRegex.test(password);
+  };
+
+  const validateInputs = (formData: any) => {
+    const { name, email, password, favoriteMovie, role } = formData;
+
+    if (!name || !email || !password || !favoriteMovie || !role) {
+      showNotification({
+        msj: "Todos los campos son obligatorios.",
+        open: true,
+        status: 'error'
+      })
+      return false;
+    }
+
+    if (!validateEmail(email)) {
+      showNotification({
+        msj: "El correo no es válido.",
+        open: true,
+        status: 'error'
+      })
+      return false;
+    }
+
+    if (!validatePassword(password)) {
+      showNotification({
+        msj: "La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales.",
+        open: true,
+        status: 'error'
+      })
+      return false;
+    }
+
+    return true;
+  }
 
   const register = async (formData: any) => {
-    // console.log(formData)
-    startLoading()
-    await authFetch({
-      endpoint: 'auth/register',
-      redirectRoute: '/login',
-      formData,
-    })
-    finishLoading()
+    if (validateInputs(formData)) {
+      startLoading()
+      await authFetch({
+        endpoint: 'auth/register',
+        redirectRoute: '/login',
+        formData,
+      })
+      finishLoading()
+    }
   }
 
   return (
@@ -44,12 +91,6 @@ export default function RegisterPage() {
               name='password'
               type='password'
             />
-            {/* <Form.Input
-              placeholder='Confirma tu contraseña...'
-              label='Confirma tu Contraseña'
-              name='confirmPassword'
-              type='password'
-            /> */}
             <Form.Input
               placeholder='¿Cuál es tu película favorita?'
               label='Pregunta de seguridad'

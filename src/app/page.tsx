@@ -64,7 +64,7 @@ export default function LandingPage() {
               <Nav.Item icon={<FontAwesomeIcon icon={faCartShopping} fontSize={30} />}>Carrito</Nav.Item>
 
               {getCookie('auth_cookie') !== null
-                ? <Nav.Menu title="Cuenta"
+                ? <Nav.Menu title={localStorage.getItem('name')}
                   icon={<UserInfoIcon />}
                 >
                   <Nav.Item
@@ -77,7 +77,7 @@ export default function LandingPage() {
                   <Nav.Item
                     onClick={handleLogout}
                   >
-                    Salir
+                    Cerrar Sesión
                   </Nav.Item>
                 </Nav.Menu>
                 : <Nav.Item
@@ -96,9 +96,9 @@ export default function LandingPage() {
 
         <Content>
           <div className='m-3'>
-            {/* <Carousel autoplay className="custom-slider" style={{ maxHeight: 300 }}> */}
             <div className='d-flex justify-content-center'>
-              <Carousel 
+              <Carousel
+                autoplay
                 className="custom-slider w-75" 
                 style={{ maxHeight: 300, marginBottom: 12, borderRadius: 12 }}
                 shape='bar'

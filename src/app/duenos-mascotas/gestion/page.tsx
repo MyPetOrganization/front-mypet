@@ -37,7 +37,6 @@ import RemindIcon from '@rsuite/icons/legacy/Remind';
 import 'rsuite/dist/rsuite.min.css';
 import HttpService from "@/helpers/HttpService";
 import NotificationContext from "@/context/NotificationContext";
-import { set } from "rsuite/esm/internals/utils/date";
 
 function previewFile(file, callback) {
     const reader = new FileReader();
@@ -451,7 +450,7 @@ export default function GestionCuenta() {
 
             <Container>
                 <Header>
-                    <h2>Cuenta MyPet</h2>
+                    <h2 style={{ color: "#FE5028" }}>Cuenta MyPet</h2>
                 </Header>
                 <Content className="mt-2">
                     <Uploader
@@ -473,7 +472,7 @@ export default function GestionCuenta() {
                         }}
                     >
                         <Whisper placement="top" speaker={<Tooltip>Presiona para cargar una foto</Tooltip>}>
-                            <Button style={{ width: 200, height: 200, position: 'relative' }}>
+                            <Button style={{ width: 200, height: 200, position: 'relative', background: "#CFF5E6" }}>
                                 {uploading && <Loader backdrop center />}
                                 {fileInfo ? (
                                     <img src={fileInfo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -493,8 +492,8 @@ export default function GestionCuenta() {
 
                     <Row className="mx-4">
                         <Col xs={24} sm={24} md={10} className="mt-3">
-                            <Panel bordered>
-                                <h5>DATOS PERSONALES</h5>
+                            <Panel bordered style={{ border: "2px solid #053BA6" }}>
+                                <h5 style={{ color: "#FE5028" }}>DATOS PERSONALES</h5>
                                 <Form
                                     fluid
                                     ref={formRef}
@@ -532,10 +531,10 @@ export default function GestionCuenta() {
                         </Col>
 
                         <Col xs={24} sm={24} md={14} className="mt-3">
-                            <Panel bordered>
+                            <Panel bordered style={{ border: "2px solid #053BA6" }}>
                                 <div className="d-flex justify-content-between">
-                                    <h5>TARJETAS ASOCIADAS</h5>
-                                    <IconButton color="blue" appearance="primary" icon={<PlusIcon />}
+                                    <h5 style={{ color: "#FE5028" }}>TARJETAS ASOCIADAS</h5>
+                                    <IconButton color="green" appearance="primary" icon={<PlusIcon />}
                                         onClick={() => setShowCardsModal(true)}
                                     >
                                         Crear
@@ -543,7 +542,7 @@ export default function GestionCuenta() {
                                 </div>
                                 <PanelGroup accordion bordered
                                     className="my-3"
-                                    style={{ height: "228px", overflowY: "auto" }}
+                                    style={{ height: "216px", overflowY: "auto" }}
                                 >
                                     {tarjetas.map((tarjeta, index) => (
                                         <Panel header={<h5>{tarjeta.cardName}</h5>} eventKey={index + 1} key={index}>
@@ -612,7 +611,7 @@ export default function GestionCuenta() {
 
             <Modal open={showCardsModal} onClose={() => setShowCardsModal(false)} size="sm" >
                 <Modal.Header>
-                    <Modal.Title>{updateCard ? "Actualizar" : "Registrar"} tarjeta</Modal.Title>
+                    <Modal.Title style={{ color: "#FE5028" }}>{updateCard ? "Actualizar" : "Registrar"} tarjeta</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form
@@ -632,7 +631,7 @@ export default function GestionCuenta() {
                         <Form.Group controlId="cardNumber">
                             <Form.ControlLabel>Número de tarjeta</Form.ControlLabel>
                             {/* <Form.Control name="cardNumber" onKeyPress={handleKeyPress} /> */}
-                            <Form.Control name="cardNumber" />
+                            <Form.Control name="cardNumber" disabled={updateCard} />
                         </Form.Group>
 
                         {!updateCard && (

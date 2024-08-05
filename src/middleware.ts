@@ -1,6 +1,7 @@
 import axios from 'axios'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
+import { URL_BASE } from './config'
 
 export async function middleware(request: NextRequest) {
   try {
@@ -13,9 +14,12 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL('/login', request.url))
     }
 
+    // Crear una respuesta para modificar las cookies
+    const response = NextResponse.next();
+
     // Si hay token, verificarlo
     if (token) {
-      const resp = await axios.get('http://localhost:3001/api/auth/verify', {
+      const resp = await axios.get(`${URL_BASE}auth/verify`, {
         headers: {
           Authorization: `Bearer ${token.value}`
         }
@@ -26,6 +30,15 @@ export async function middleware(request: NextRequest) {
       // Si el token no es autorizado, redirigir a la página de login
       if (!data.token) {
         return NextResponse.redirect(new URL('/login', request.url))
+      } else {
+        
+        // Establecer la cookie de autenticación
+        response.cookies.set('auth_cookie', data.token, {
+          httpOnly: false, // Cambiar a true en producción
+          secure: false, // Cambiar a true en producción
+          // path: '/',
+          maxAge: 60 * 60 * 2 
+        })
       }
 
       // Redirigir basado en el rol del usuario
@@ -44,7 +57,7 @@ export async function middleware(request: NextRequest) {
       }
     }
 
-    return NextResponse.next()
+    return response;
   } catch (error) {
     return NextResponse.redirect(new URL('/login', request.url))
   }

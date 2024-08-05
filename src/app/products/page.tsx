@@ -10,6 +10,7 @@ import { columnsProduct, getCookie } from "./components/constants";
 import axios from "axios";
 import ConfirmationModal from "./components/confirmation";
 import { get } from "http";
+import { URL_BASE } from "@/config";
 
 interface Product {
     id: number;
@@ -35,7 +36,7 @@ export default function StockProductos() {
     const getProducts = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`http://localhost:3001/api/products/${localStorage.getItem('id_user')}`, {
+            const response = await axios.get(`${URL_BASE}products/${localStorage.getItem('id_user')}`, {
                 headers: {
                     "Authorization": `Bearer ${getCookie("auth_cookie")}`
                 }
@@ -67,7 +68,7 @@ export default function StockProductos() {
 
     const handleSearch = async () => {
         try {
-            const response = await axios.post(`http://localhost:3001/api/products/fobn/${localStorage.getItem('id_user')}`, { name: searchKeyword }, {
+            const response = await axios.post(`${URL_BASE}products/fobn/${localStorage.getItem('id_user')}`, { name: searchKeyword }, {
                 headers: {
                     Authorization: `Bearer ${getCookie('auth_cookie')}`
                 }
@@ -110,7 +111,7 @@ export default function StockProductos() {
     const removeProduct = async (id: number) => {
         if (remove) {
             try {
-                const response = await axios.delete(`http://localhost:3001/api/products/${localStorage.getItem('id_user')}`, {
+                const response = await axios.delete(`${URL_BASE}products/${localStorage.getItem('id_user')}`, {
                     headers: {
                         "Authorization": `Bearer ${getCookie("auth_cookie")}`
                     },
@@ -155,10 +156,14 @@ export default function StockProductos() {
             actions: (
                 <div className="d-flex justify-content-around">
                     <IconButton
+                        appearance="primary"
+                        color="red"
                         icon={<TrashIcon />}
                         onClick={() => handleDelete(product.id)}
                     />
                     <IconButton
+                        appearance="primary"
+                        color="green"
                         icon={<EditIcon />}
                         onClick={() => handleUpdate(product)}
                     />
@@ -171,14 +176,14 @@ export default function StockProductos() {
         <>
             <Container>
                 <Header>
-                    <h2>Stock de productos</h2>
+                    <h2 style={{ color: "#FE5028" }}>Stock de productos</h2>
                 </Header>
                 <Content className="mt-3">
                     <Grid fluid>
                         <Row className="show-grid mb-3">
                             <Col xs={24} sm={24} md={8}>
                                 <Input
-                                    placeholder="Buscar producto"
+                                    placeholder="Buscar productos"
                                     value={searchKeyword}
                                     onChange={(event) => handleInput(event)}
                                 />
@@ -186,6 +191,8 @@ export default function StockProductos() {
                             <Col>
                                 <ButtonToolbar>
                                     <IconButton
+                                        appearance="primary"
+                                        color="green"
                                         icon={<SearchIcon />}
                                         size="md"
                                         className="ms-2"
@@ -198,6 +205,8 @@ export default function StockProductos() {
                         <Row>
                             <Col>
                                 <IconButton
+                                    appearance="primary"
+                                    color="green"
                                     icon={<PlusIcon />}
                                     size="md"
                                     onClick={handleCreate}

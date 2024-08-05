@@ -3,6 +3,7 @@ import axios, { AxiosRequestConfig } from 'axios'
 import { useRouter } from 'next/navigation'
 import { useContext } from 'react'
 import Cookies from 'js-cookie'
+import { URL_BASE } from '@/config'
 
 interface AuthFetchProps {
   endpoint: string
@@ -11,7 +12,7 @@ interface AuthFetchProps {
   options?: AxiosRequestConfig<any>
 }
 
-export function useAuthFetch () {
+export function useAuthFetch() {
   const { showNotification } = useContext(NotificationContext)
   const router = useRouter()
 
@@ -23,7 +24,7 @@ export function useAuthFetch () {
   }: AuthFetchProps) => {
     try {
       const { data } = await axios.post(
-        `http://localhost:3001/api/${endpoint}`,
+        `${URL_BASE}${endpoint}`,
         formData,
         options
       );
@@ -34,17 +35,17 @@ export function useAuthFetch () {
         status: 'success'
       })
 
-      if(endpoint === 'auth/login') {
+      if (endpoint === 'auth/login') {
+        const expirationTime = new Date();
+        expirationTime.setTime(expirationTime.getTime() + (2 * 60 * 60 * 1000));
+
         console.log(data)
-        Cookies.set('auth_cookie', data.token, { expires: 7 })
-        Cookies.set('role', data.user.role, { expires: 7 })
+        Cookies.set('auth_cookie', data.token, { httpOnly: false, expires: expirationTime }) // Cmabiar a true en producción
+        Cookies.set('role', data.user.role, { httpOnly: false, expires: expirationTime }) // Cmabiar a true en producción
+
         localStorage.setItem('id_user', data.user.id)
-        // localStorage.setItem('role', data.user.role)
+        localStorage.setItem('name', data.user.name)
 
-        // Configurar el encabezado con el rol del usuario
-        // axios.defaults.headers.common['x-user-role'] = data.user.role
-
-        // Redirigir basado en el rol
         if (data.user.role === 'seller') {
           router.push('/home')
         } else if (data.user.role === 'buyer') {

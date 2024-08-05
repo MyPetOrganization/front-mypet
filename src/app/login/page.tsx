@@ -1,25 +1,60 @@
 'use client'
 
 import { Form } from "@/components/Form";
+import NotificationContext from "@/context/NotificationContext";
 import { useAuthFetch } from "@/hooks/useAuthFetch";
 import { useLoading } from "@/hooks/useLoading";
 // import HomePage from "./home/page";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 export default function LoginPage() {
     const { finishLoading, isLoading, startLoading } = useLoading()
     const authFetch = useAuthFetch()
-    const [open, setOpen] = useState(false);
+    const { showNotification } = useContext(NotificationContext)
+
+    const validateEmail = (email: string) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const validatePassword = (password: string) => {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        return passwordRegex.test(password);
+    };
+
+    const validateInputs = (formData: any) => {
+        const { email, password, role } = formData;
+
+        if (!email || !password || !role) {
+            showNotification({
+                msj: "Todos los campos son obligatorios.",
+                open: true,
+                status: 'error'
+            })
+            return false;
+        }
+
+        // if (!validateEmail(email) || !validatePassword(password)) {
+        if (!validateEmail(email)) {
+            showNotification({
+                msj: "Credenciales incorrectas.",
+                open: true,
+                status: 'error'
+            })
+            return false;
+        }
+        return true;
+    }
 
     const login = async (formData: any) => {
-        startLoading()
-        await authFetch({
-            endpoint: 'auth/login',
-            // redirectRoute: '/home',
-            // redirectRoute: `${formData.role === 'buyer' ? '/' : formData.role === 'seller' ? '/home' : ''}`,
-            formData,
-        })
-        finishLoading()
+        if (validateInputs(formData)) {
+            startLoading()
+            await authFetch({
+                endpoint: 'auth/login',
+                formData,
+            })
+            finishLoading()
+        }
     }
 
     return (
@@ -42,10 +77,10 @@ export default function LoginPage() {
                             name='password'
                             type='password'
                         />
-                        <Form.Select 
+                        <Form.Select
                             label="Rol"
                             name="role"
-                            options={[ {label: "Dueño de mascota", value: "buyer"}, {label: "Emprendedor", value: "seller"} ]}
+                            options={[{ label: "Dueño de mascota", value: "buyer" }, { label: "Emprendedor", value: "seller" }]}
                             placeholder="Selecciona un rol"
                         />
                     </div>

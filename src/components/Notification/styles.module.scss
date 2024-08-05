@@ -3,17 +3,17 @@
     // bottom: 0;
     top: 0;
     right: 0;
-    margin-top: 1rem;
+    margin-top: 5rem;
     z-index: 5;
   
     display: flex;
     align-items: center;
     animation: start 0.5s forwards;
   
-    height: 50px;
-    width: fit-content;
+    height: auto;
+    width: 200px;
     padding: .6rem 1rem;
-    transition: .3s;
+    transition: .8s;
   
     border: .5px solid #878787;
     border-radius: 10px 0 0 10px;
